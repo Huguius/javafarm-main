@@ -1,34 +1,14 @@
-
 package br.com.joaocarloslima;
 
-public class Morango {
-    private int tamanho;
-    private int tempoDeVida;
-    private int tempodeCrescimento;
+public class Morango extends Planta {
 
     public Morango() {
-        this.tamanho = 1;
-        this.tempoDeVida = 0;
-        this.tempodeCrescimento = 4;
+
+        super("morango", 4);
     }
 
-    public void crescer(){
-        tempoDeVida++;
-        if (tempoDeVida == tempodeCrescimento || 
-        tempoDeVida == tempodeCrescimento * 2 || 
-        tempoDeVida == tempodeCrescimento * 3) {
-        tamanho++; 
+    @Override
+    public void armazenar(Celeiro celeiro) {
+        celeiro.armazenarMorango();
     }
-    }
-
-
-    public boolean podeColher() {
-        return tamanho == 4;
-    }
-
-    public String getImagem(){
-        return "images/morango" + tamanho + ".png";
-    }
-        
 }
-

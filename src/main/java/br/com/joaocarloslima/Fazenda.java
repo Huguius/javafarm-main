@@ -12,72 +12,47 @@ public class Fazenda {
         celeiro = new Celeiro();
 
         // Criar todos os terrenos (13 x 13)
-        for (int x = 0; x < 13; x++) {
-            for (int y = 0; y < 13; y++) {
-                terrenos.add(new Terreno(x, y));
-            }
+        for (int i = 0; i < 13 * 13; i++) {
+            terrenos.add(new Terreno(i / 13, i % 13));
         }
     }
 
     public Terreno getTerreno(int x, int y) {
-        for (Terreno t : terrenos) {
-            if (t.getX() == x && t.getY() == y) {
-                return t;
-            }
-        }
-        return null;
+        return terrenos.get(x * 13 + y);
     }
 
     public Celeiro getCeleiro() {
         return celeiro;
     }
 
-    public void plantarBatata(int x, int y) {
+    private void plantar(int x, int y, Planta planta) {
         Terreno terreno = getTerreno(x, y);
         if (terreno != null) {
-            if (celeiro.getQtdeBatatas() > 0) {
-                if (!terreno.estaOcupado()) {
-                    terreno.plantar(new Batata());
-                    celeiro.consumirBatata();
-                } else {
-                    throw new IllegalStateException("Terreno ocupado!");
-                }
-            } else {
-                throw new IllegalStateException("Não há batatas no celeiro!");
+            if (terreno.estaOcupado()) {
+                throw new IllegalStateException("Este terreno já está ocupado!");
             }
+
+            if (planta instanceof Batata)
+                celeiro.consumirBatata();
+            else if (planta instanceof Cenoura)
+                celeiro.consumirCenoura();
+            else if (planta instanceof Morango)
+                celeiro.consumirMorango();
+
+            terreno.plantar(planta);
         }
+    }
+
+    public void plantarBatata(int x, int y) {
+        plantar(x, y, new Batata());
     }
 
     public void plantarCenoura(int x, int y) {
-        Terreno terreno = getTerreno(x, y);
-        if (terreno != null) {
-            if (celeiro.getQtdeCenouras() > 0) {
-                if (!terreno.estaOcupado()) {
-                    terreno.plantar(new Cenoura());
-                    celeiro.consumirCenoura();
-                } else {
-                    throw new IllegalStateException("Terreno ocupado!");
-                }
-            } else {
-                throw new IllegalStateException("Não há cenouras no celeiro!");
-            }
-        }
+        plantar(x, y, new Cenoura());
     }
 
     public void plantarMorango(int x, int y) {
-        Terreno terreno = getTerreno(x, y);
-        if (terreno != null) {
-            if (celeiro.getQtdeMorangos() > 0) {
-                if (!terreno.estaOcupado()) {
-                    terreno.plantar(new Morango());
-                    celeiro.consumirMorango();
-                } else {
-                    throw new IllegalStateException("Terreno ocupado!");
-                }
-            } else {
-                throw new IllegalStateException("Não há morangos no celeiro!");
-            }
-        }
+        plantar(x, y, new Morango());
     }
 
     public void colher(int x, int y) {
